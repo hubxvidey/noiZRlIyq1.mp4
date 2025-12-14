@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Watch on Videy - Free and Simple Video Hosting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="https://videy.co/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://videy.co/assets/style.css?cache=696041190991">
+    <meta name="6774a4677ae3199db298f6b90c6b47c376d40d86" content="6774a4677ae3199db298f6b90c6b47c376d40d86" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <style>
+      *{box-sizing:border-box}
+
+      .video-actions{width:100%;display:none;justify-content:center}
+      .video-actions-inner{
+        width:100%;
+        max-width:720px;
+        display:flex;
+        gap:8px;
+        padding:12px 12px 6px;
+        overflow-x:auto;
+        scrollbar-width:none;
+        -ms-overflow-style:none;
+        white-space:nowrap
+      }
+      .video-actions-inner::-webkit-scrollbar{display:none}
+      .action-btn{
+        background:#f2f2f2;
+        border:none;
+        padding:8px 16px;
+        border-radius:16px;
+        font-family:inherit;
+        font-size:14px;
+        font-weight:500;
+        cursor:pointer;
+        transition:background-color .2s,transform .1s;
+        flex-shrink:0
+      }
+      .action-btn,.action-btn a{color:#000}
+      .action-btn:hover{background:#e5e5e5;transform:translateY(-1px)}
+
+      .folder-row{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        margin-top:12px;
+        margin-bottom:8px
+      }
+      .folder-row-inner{
+        width:100%;
+        max-width:260px;
+        display:flex;
+        justify-content:center;
+        gap:40px;
+        padding:6px 0 2px
+      }
+      .folder-item{
+        flex-shrink:0;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:3px;
+        text-decoration:none;
+        font-family:inherit
+      }
+      .folder-icon{
+        width:32px;
+        height:20px;
+        border-radius:6px 6px 3px 3px;
+        background:linear-gradient(180deg,#ffe7b3,#ffd37a);
+        border:1px solid #e0b15a;
+        position:relative;
+        display:flex;
+        align-items:center;
+        justify-content:center
+      }
+      .folder-icon::before{
+        content:"";
+        position:absolute;
+        top:-5px;
+        left:3px;
+        width:14px;
+        height:7px;
+        border-radius:5px 5px 2px 2px;
+        background:linear-gradient(180deg,#ffecc5,#ffd890);
+        border:1px solid #e0b15a;
+        border-bottom:none
+      }
+      .folder-label{
+        font-size:10px;
+        font-weight:500;
+        color:#222;
+        white-space:nowrap;
+        text-align:center
+      }
+      .folder-item:active .folder-icon{filter:brightness(.95)}
+
+      .video-inner{
+        position:relative;
+      }
+      .video-click-layer{
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+        background:transparent;
+        border:none;
+        padding:0;
+        margin:0;
+        cursor:pointer;
+        z-index:5;
+      }
+      .native-banner-wrap{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:16px 12px 8px;
+      }
+      .native-banner-wrap > *{
+        max-width:100%;
+      }
+      .native-banner-wrap img,
+      .native-banner-wrap iframe{
+        display:block;
+        max-width:100%;
+        height:auto;
+      }
+
+    </style>
+      </head>
+  <body data-version="v1.0.5" developed-by="tianndev">
+    <div class="container">
+      <div class="top">
+        <div class="logo"><a href="https://videy.co/">videy</a></div>
+        <a href="https://fortunatelychastise.com/vhtg2t31gs?key=1489dce05bf7e562bb7f1f16addedbbc"><div class="upload">Upload</div></a>
+        
+      </div>
+        
+      <div class="video">
+        <div class="video-inner">
+            <video
+              id="video"
+              autoplay
+              controls
+              controlsList="nodownload noplaybackrate"
+              oncontextmenu="return false;"
+              width="100%"
+              playsinline>
+              Your browser does not support the video tag.
+            </video>
+          <button
+            type="button"
+            class="video-click-layer"
+            id="firstClickLayer"
+            aria-label="Open video link">
+          </button>
+          <div id="video-error" style="display:none" class="video-error-container">
+            <div class="video-error">Video could not load.</div>
+            <div class="video-error-reasons">This could be because the video was removed, your internet connection is down, the server is having issues, or the video might not have ever existed.</div>
+          </div>
+        </div>
+      </div>
+        
+      <div class="share-container" style="display:flex;">
+        <div class="share-heading">Share this link</div>
+        <div class="share-buttons">
+          <a href="mailto:?body=" class="share-btn" id="emailShareBtn"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Email</title><path d="M15.61 12c0 1.99-1.62 3.61-3.61 3.61-1.99 0-3.61-1.62-3.61-3.61 0-1.99 1.62-3.61 3.61-3.61 1.99 0 3.61 1.62 3.61 3.61M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12c2.424 0 4.761-.722 6.76-2.087l.034-.024-1.617-1.879-.027.017A9.494 9.494 0 0 1 12 21.54c-5.26 0-9.54-4.28-9.54-9.54 0-5.26 4.28-9.54 9.54-9.54 5.26 0 9.54 4.28 9.54 9.54a9.63 9.63 0 0 1-.225 2.05c-.301 1.239-1.169 1.618-1.82 1.568-.654-.053-1.42-.52-1.426-1.661V12A6.076 6.076 0 0 0 12 5.93 6.076 6.076 0 0 0 5.93 12 6.076 6.076 0 0 0 12 18.07a6.02 6.02 0 0 0 4.3-1.792 3.9 3.9 0 0 0 3.32 1.805c.874 0 1.74-.292 2.437-.821.719-.547 1.256-1.336 1.553-2.285.047-.154.135-.504.135-.507l.002-.013c.175-.76.253-1.52.253-2.457 0-6.617-5.383-12-12-12"></path></svg> Email</a>
+          <a href="https://twitter.com/intent/tweet?url=" target="_blank" class="share-btn" id="twitterShareBtn"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>X</title><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg> Twitter</a>
+          <a href="https://wa.me/?text=" target="_blank" class="share-btn" id="whatsappShareBtn"><svg role="img" fill="#25D366" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>WhatsApp</title><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg> WhatsApp</a>
+          <a href="https://t.me/share/url?url=" target="_blank" class="share-btn" id="telegramShareBtn"><svg role="img" fill="#26A5E4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Telegram</title><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg> Telegram</a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=" target="_blank" class="share-btn" id="facebookShareBtn"><svg role="img" fill="#0866FF" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg> Facebook</a>
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" class="share-btn" id="linkedinShareBtn" aria-label="Share on LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48"><path fill="#0288D1" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"></path><path fill="#FFF" d="M12 19H17V36H12zM14.485 17h-.028C12.965 17 12 15.888 12 14.499 12 13.08 12.995 12 14.514 12c1.521 0 2.458 1.08 2.486 2.499C17 15.887 16.035 17 14.485 17zM36 36h-5v-9.099c0-2.198-1.225-3.698-3.192-3.698-1.501 0-2.313 1.012-2.707 1.99C24.957 25.543 25 26.511 25 27v9h-5V19h5v2.616C25.721 20.5 26.85 19 29.738 19c3.578 0 6.261 2.25 6.261 7.274L36 36 36 36z"></path></svg>LinkedIn</a>
+          <a href="https://www.reddit.com/submit?url=" target="_blank" class="share-btn" id="redditShareBtn" aria-label="Share on Reddit"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve"><g transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"><circle cx="45" cy="45" r="45" style="fill:rgb(255,69,0);"/><path d="M 75.011 45 c -0.134 -3.624 -3.177 -6.454 -6.812 -6.331 c -1.611 0.056 -3.143 0.716 -4.306 1.823 c -5.123 -3.49 -11.141 -5.403 -17.327 -5.537 l 2.919 -14.038 l 9.631 2.025 c 0.268 2.472 2.483 4.262 4.955 3.993 c 2.472 -0.268 4.262 -2.483 3.993 -4.955 s -2.483-4.262-4.955-3.993 c -1.421 0.145 -2.696 0.973 -3.4 2.204 L 48.68 17.987 c -0.749 -0.168 -1.499 0.302 -1.667 1.063 l -3.322 15.615 c -6.264 0.101 -12.36 2.025 -17.55 5.537 c -2.64 -2.483 -6.801 -2.36 -9.284 0.291 c -2.483 2.64 -2.36 6.801 0.291 9.284 c 0.515 0.481 1.107 0.895 1.767 1.186 c -0.045 0.66 -0.045 1.32 0 1.98 c 0 10.078 11.745 18.277 26.23 18.277 c 14.485 0 26.23 -8.188 26.23 -18.277 c 0.045 -0.66 0.045 -1.32 0 -1.98 C 73.635 49.855 75.056 47.528 75.011 45 z M 30.011 49.508 c 0 -2.483 2.025 -4.508 4.508 -4.508 c 2.483 0 4.508 2.025 4.508 4.508 s -2.025 4.508 -4.508 4.508 C 32.025 53.993 30.011 51.991 30.011 49.508 z M 56.152 62.058 v -0.179 c -3.199 2.405 -7.114 3.635 -11.119 3.468 c -4.005 0.168 -7.919 -1.063 -11.119 -3.468 c -0.425 -0.515 -0.347 -1.286 0.168 -1.711 c 0.447 -0.369 1.085 -0.369 1.544 0 c 2.707 1.98 6.007 2.987 9.362 2.83 c 3.356 0.179 6.667 -0.783 9.407 -2.74 c 0.492 -0.481 1.297 -0.47 1.779 0.022 C 56.655 60.772 56.644 61.577 56.152 62.058 z M 55.537 54.34 c -0.078 0 -0.145 0 -0.224 0 l 0.034 -0.168 c -2.483 0 -4.508 -2.025 -4.508 -4.508 s 2.025 -4.508 4.508 -4.508 s 4.508 2.025 4.508 4.508 C 59.955 52.148 58.02 54.239 55.537 54.34 z" style="fill:#fff;" stroke-linecap="round"/></g></svg>Reddit</a>
+        </div>
+      </div>
+      <div class="native-banner-wrap">
+              </div>
+      <div style="height:200px;"></div>
+      <center><script type="text/javascript">
+	atOptions = {
+		'key' : '395241f66504662d4f38dd2e70d5bfb7',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//surprisinglyferry.com/395241f66504662d4f38dd2e70d5bfb7/invoke.js"></script></center>
+      <div class="footer">
+        <div class="copyright">Copyright &copy; 2025 videy</div>
+        <div class="legal">
+          <div class="item"><a href="/terms-of-service">Terms of Service</a></div>
+          <div class="item"><a href="/report" id="reportAbuse">Report Abuse</a></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const video        = document.getElementById("video");
+      const videoError   = document.getElementById("video-error");
+      const videoActions = document.querySelector(".video-actions");
+      const clickLayer   = document.getElementById("firstClickLayer");
+      const id           = "XN09yRQ61";
+      const base         = "https://cdn.videy.co/" + id;
+
+      function loadVideo(src){
+        video.src = src;
+        video.load();
+      }
+
+      loadVideo(base + ".mp4");
+
+      video.onerror = function () {
+        if (!video.dataset.triedMov) {
+          video.dataset.triedMov = "1";
+          loadVideo(base + ".mov");
+        } else {
+          video.style.display        = "none";
+          videoError.style.display   = "block";
+          videoActions.style.display = "none";
+          if (clickLayer) clickLayer.style.display = "none";
+        }
+      };
+
+      video.oncanplay = function () {
+        videoError.style.display    = "none";
+        video.style.display         = "block";
+        videoActions.style.display  = "flex";
+      };
+
+      (function(){
+        const layer = document.getElementById('firstClickLayer');
+        const directLink = "https://fortunatelychastise.com/vhtg2t31gs?key=1489dce05bf7e562bb7f1f16addedbbc";
+
+        if (!layer || !directLink || directLink === '#') {
+          if (layer) layer.remove();
+          return;
+        }
+
+        layer.addEventListener('click', function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          window.open(directLink, '_blank');
+          layer.remove();
+        }, { once: true });
+      })();
+    </script>
+    <script>
+      $(function(){
+        $('#copyUrl').on('click',function(){
+          navigator.clipboard.writeText(window.location.href).then(function(){
+            const t = $(this).text();
+            $(this).text('Copied!');
+            setTimeout(()=>$(this).text(t),2000);
+          }.bind(this));
+        });
+
+        $('#uploadVideo').on('click',function(){
+          window.location.href='/';
+        });
+      });
+    </script>
+        <!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4689473,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4689473&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+</body>
+</html>
